@@ -1,0 +1,20 @@
+services:
+
+  nginx-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    container_name: nginx-manager
+    ports:
+      - '80:80' #html
+      - '443:443' #https
+      - '50001:81' #web int admin access
+    volumes: 
+        ./nginx/data:/data
+        ./nginx/letsencrypt:/etc/letsencrypt
+  
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app

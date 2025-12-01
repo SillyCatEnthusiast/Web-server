@@ -1,33 +1,42 @@
 const express = require('express');
+const session = require("express-session");
+const path = require("path");
+const exphbs = require("express-handlebars");
 
 const app = express();
-const PORT = process.env.PORT || 3000;  //you don't need to use your special IP anymore!
+const PORT = process.env.PORT || 3000;
 
 
-// Body parsing middleware
-app.use(express.json());
+const users = [];
+const comments = [];
+
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the public directory
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, "public")));
 
-// Routes
-app.get('/api', (req, res) => {
-  res.json({
-    message: 'Welcome to my Node.js Express app!',
-    timestamp: new Date().toISOString(),
-  });
-});
+app.use(
+  session({
+    secret: "insecure-secret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+app.engine(
+  "hbs",
+  exphbs.engine({
+    extname: "hbs",
+    defaultLayout: "main",
+    layoutsDir: path.join(__dirname, "views/layouts"),
+    partialsDir: path.join(__dirname, "views/partials"),
+  })
+);
+
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "views"));
 
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
 
-// Start server
-// Note: We use '0.0.0.0' instead of 'localhost' because Docker containers
-// need to bind to all network interfaces to accept connections from outside the container
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });

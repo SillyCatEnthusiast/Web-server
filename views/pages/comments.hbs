@@ -1,0 +1,15 @@
+<h1>Comments</h1>
+
+{{#if error}}
+  <p style="color:red;">{{error}}</p>
+{{/if}}
+
+{{#if comments.length}}
+  <ul>
+    {{#each comments}}
+      <li><strong>{{author}}</strong>: {{{text}}} ({{createdAt}})</li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>No comments yet.</p>
+{{/if}}

@@ -1,20 +1,24 @@
-services:
+version: "3.8"
 
+services:
   nginx-manager:
-    image: 'jc21/nginx-proxy-manager:latest'
-    restart: unless-stopped
+    image: jc21/nginx-proxy-manager:latest
     container_name: nginx-manager
+    restart: unless-stopped
     ports:
-      - '80:80' #html
-      - '443:443' #https
-      - '50001:81' #web int admin access
-    volumes: 
-        ./nginx/data:/data
-        ./nginx/letsencrypt:/etc/letsencrypt
-  
+      - "80:80"      # HTTP
+      - "443:443"    # HTTPS
+      - "50001:81"   # NPM web UI
+    volumes:
+      - ./nginx/data:/data
+      - ./nginx/letsencrypt:/etc/letsencrypt
+
   app:
     build: ./app
+    container_name: wildwest-app
+    restart: unless-stopped
     ports:
-      - "3000:3000"
-    volumes:
-      - ./app:/app
+      - "3000:3000"  # for direct access / debugging
+    environment:
+      - PORT=3000
+    # no volumes -> use what's baked into the image

@@ -2,17 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Wild West Forum</title>
+  <title>{{#if title}}{{title}} · {{/if}}Wild West Forum</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
+  <!-- Top nav -->
   <header class="site-header">
-    <div class="header-inner">
-      <div class="brand">
-        <span class="brand-logo">🤠</span>
-        <span class="brand-text">Wild West Forum</span>
-      </div>
+    <div class="container header-inner">
+      <a href="/" class="brand">
+        <div class="brand-text-group">
+          <span class="brand-title">Wild West Forum</span>
+          <span class="brand-tagline">A questionably safe place to post</span>
+        </div>
+      </a>
 
       <nav class="main-nav">
         <a href="/">Home</a>
@@ -20,26 +24,34 @@
         <a href="/comment/new">New Comment</a>
 
         {{#if user}}
-          <span class="user-pill">Logged in as <strong>{{user}}</strong></span>
+          <span class="user-pill">
+            <span class="user-dot"></span>
+            {{user}}
+          </span>
           <form action="/logout" method="POST" class="logout-form">
             <button type="submit" class="btn btn-outline">Logout</button>
           </form>
         {{else}}
-          <a href="/register" class="btn btn-light">Register</a>
-          <a href="/login" class="btn btn-primary">Login</a>
+          <a href="/register" class="btn btn-ghost">Sign up</a>
+          <a href="/login" class="btn btn-primary">Log in</a>
         {{/if}}
       </nav>
     </div>
   </header>
 
+  <!-- Main content -->
   <main class="page-main">
-    <section class="page-card">
+    <div class="container page-layout">
       {{{body}}}
-    </section>
+    </div>
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
-    <p>Wild West Forum · Midterm Project</p>
+    <div class="container footer-inner">
+      <p>Wild West Forum · Midterm Project</p>
+      <p class="footer-meta">Built with Node, Express, and Handlebars</p>
+    </div>
   </footer>
 </body>
 </html>

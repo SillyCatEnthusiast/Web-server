@@ -1,21 +1,30 @@
-<h1>Log in</h1>
+<section class="auth-layout">
+  <div class="auth-card">
+    <h1>Log in</h1>
+    <p class="auth-subtitle">
+      Use the username and password you registered with. Case-sensitive.
+    </p>
 
-{{#if error}}
-  <div class="alert alert-error">
-    {{error}}
+    {{#if error}}
+      <div class="alert alert-error">{{error}}</div>
+    {{/if}}
+
+    <form action="/login" method="POST" class="form-card">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">Log in</button>
+    </form>
+
+    <p class="auth-footer">
+      New here? <a href="/register">Create an account</a>
+    </p>
   </div>
-{{/if}}
-
-<form action="/login" method="POST" class="form-card">
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input id="username" name="username" type="text" required>
-  </div>
-
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input id="password" name="password" type="password" required>
-  </div>
-
-  <button type="submit" class="btn btn-primary btn-full">Log in</button>
-</form>
+</section>

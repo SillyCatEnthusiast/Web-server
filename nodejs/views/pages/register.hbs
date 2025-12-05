@@ -1,26 +1,30 @@
-<h1>Create an account</h1>
+<section class="auth-layout">
+  <div class="auth-card">
+    <h1>Create an account</h1>
+    <p class="auth-subtitle">
+      Pick a username and a password. They will be stored exactly as you type them.
+    </p>
 
-{{#if error}}
-  <div class="alert alert-error">
-    {{error}}
+    {{#if error}}
+      <div class="alert alert-error">{{error}}</div>
+    {{/if}}
+
+    <form action="/register" method="POST" class="form-card">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password (plain text)</label>
+        <input id="password" name="password" type="password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">Sign up</button>
+    </form>
+
+    <p class="auth-footer">
+      Already have an account? <a href="/login">Log in</a>
+    </p>
   </div>
-{{/if}}
-
-<form action="/register" method="POST" class="form-card">
-  <div class="form-group">
-    <label for="username">Username</label>
-    <input id="username" name="username" type="text" required>
-  </div>
-
-  <div class="form-group">
-    <label for="password">Password (stored in plain text)</label>
-    <input id="password" name="password" type="password" required>
-  </div>
-
-  <button type="submit" class="btn btn-primary btn-full">Register</button>
-</form>
-
-<p class="form-footer-text">
-  Already have an account?
-  <a href="/login">Log in</a>
-</p>
+</section>

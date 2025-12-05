@@ -1,16 +1,21 @@
-<h1>New Comment</h1>
+<section class="page-section">
+  <header class="section-header">
+    <h1>New comment</h1>
+    <p class="section-subtitle">
+      Say whatever you want. Just remember: it might be shown on the front page.
+    </p>
+  </header>
 
-{{#if error}}
-  <div class="alert alert-error">
-    {{error}}
-  </div>
-{{/if}}
+  {{#if error}}
+    <div class="alert alert-error">{{error}}</div>
+  {{/if}}
 
-<form action="/comment" method="POST" class="form-card">
-  <div class="form-group">
-    <label for="text">Your comment</label>
-    <textarea id="text" name="text" rows="4" required></textarea>
-  </div>
+  <form action="/comment" method="POST" class="form-card">
+    <div class="form-group">
+      <label for="text">Your comment</label>
+      <textarea id="text" name="text" rows="4" required></textarea>
+    </div>
 
-  <button type="submit" class="btn btn-primary btn-full">Post Comment</button>
-</form>
+    <button type="submit" class="btn btn-primary btn-full">Post comment</button>
+  </form>
+</section>

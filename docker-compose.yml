@@ -14,8 +14,8 @@ services:
       - ./nginx/letsencrypt:/etc/letsencrypt
 
   app:
-    build: ./app
-    container_name: wildwest-app
+    build: ./nodejs
+    container_name: wildwest-nodejs
     restart: unless-stopped
     ports:
       - "3000:3000"  # for direct access / debugging

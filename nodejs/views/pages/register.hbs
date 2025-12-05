@@ -1,11 +1,26 @@
-<h1>Register</h1>
+<h1>Create an account</h1>
 
 {{#if error}}
-  <p style="color:red;">{{error}}</p>
+  <div class="alert alert-error">
+    {{error}}
+  </div>
 {{/if}}
 
-<form action="/register" method="POST">
-  <label>Username: <input type="text" name="username"></label><br>
-  <label>Password: <input type="password" name="password"></label><br>
-  <button type="submit">Register</button>
+<form action="/register" method="POST" class="form-card">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input id="username" name="username" type="text" required>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password (stored in plain text)</label>
+    <input id="password" name="password" type="password" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-full">Register</button>
 </form>
+
+<p class="form-footer-text">
+  Already have an account?
+  <a href="/login">Log in</a>
+</p>

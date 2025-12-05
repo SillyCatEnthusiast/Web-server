@@ -1,14 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Wild West Forum</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  {{> nav}}
-  <main>
-    {{{body}}}
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-logo">🤠</span>
+        <span class="brand-text">Wild West Forum</span>
+      </div>
+
+      <nav class="main-nav">
+        <a href="/">Home</a>
+        <a href="/comments">Comments</a>
+        <a href="/comment/new">New Comment</a>
+
+        {{#if user}}
+          <span class="user-pill">Logged in as <strong>{{user}}</strong></span>
+          <form action="/logout" method="POST" class="logout-form">
+            <button type="submit" class="btn btn-outline">Logout</button>
+          </form>
+        {{else}}
+          <a href="/register" class="btn btn-light">Register</a>
+          <a href="/login" class="btn btn-primary">Login</a>
+        {{/if}}
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <section class="page-card">
+      {{{body}}}
+    </section>
   </main>
-  {{> footer}}
+
+  <footer class="site-footer">
+    <p>Wild West Forum · Midterm Project</p>
+  </footer>
 </body>
 </html>

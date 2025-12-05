@@ -1,10 +1,16 @@
 <h1>New Comment</h1>
 
 {{#if error}}
-  <p style="color:red;">{{error}}</p>
+  <div class="alert alert-error">
+    {{error}}
+  </div>
 {{/if}}
 
-<form action="/comment" method="POST">
-  <textarea name="text" rows="4" cols="50"></textarea><br>
-  <button type="submit">Post Comment</button>
+<form action="/comment" method="POST" class="form-card">
+  <div class="form-group">
+    <label for="text">Your comment</label>
+    <textarea id="text" name="text" rows="4" required></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-full">Post Comment</button>
 </form>

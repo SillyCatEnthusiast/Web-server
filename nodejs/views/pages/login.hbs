@@ -1,11 +1,21 @@
-<h1>Login</h1>
+<h1>Log in</h1>
 
 {{#if error}}
-  <p style="color:red;">{{error}}</p>
+  <div class="alert alert-error">
+    {{error}}
+  </div>
 {{/if}}
 
-<form action="/login" method="POST">
-  <label>Username: <input type="text" name="username"></label><br>
-  <label>Password: <input type="password" name="password"></label><br>
-  <button type="submit">Login</button>
+<form action="/login" method="POST" class="form-card">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input id="username" name="username" type="text" required>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-full">Log in</button>
 </form>

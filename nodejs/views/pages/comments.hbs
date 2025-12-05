@@ -1,15 +1,25 @@
 <h1>Comments</h1>
 
 {{#if error}}
-  <p style="color:red;">{{error}}</p>
+  <div class="alert alert-error">
+    {{error}}
+  </div>
 {{/if}}
 
 {{#if comments.length}}
-  <ul>
+  <ul class="comment-list">
     {{#each comments}}
-      <li><strong>{{author}}</strong>: {{{text}}} ({{createdAt}})</li>
+      <li class="comment-item">
+        <div class="comment-meta">
+          <span class="comment-author">@{{author}}</span>
+          <span class="comment-date">{{createdAt}}</span>
+        </div>
+        <div class="comment-body">
+          {{{text}}}
+        </div>
+      </li>
     {{/each}}
   </ul>
 {{else}}
-  <p>No comments yet.</p>
+  <p class="muted">No comments yet. Be the first!</p>
 {{/if}}

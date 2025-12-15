@@ -24,9 +24,10 @@
         <a href="/comment/new">New Comment</a>
 
         {{#if user}}
+          <a href="/profile">Profile</a>
           <span class="user-pill">
             <span class="user-dot"></span>
-            {{user}}
+            {{user.display_name}}
           </span>
           <form action="/logout" method="POST" class="logout-form">
             <button type="submit" class="btn btn-outline">Logout</button>

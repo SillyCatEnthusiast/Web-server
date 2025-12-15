@@ -2,7 +2,7 @@
   <div class="auth-card">
     <h1>Create an account</h1>
     <p class="auth-subtitle">
-      Pick a username and a password. They will be stored exactly as you type them.
+      Create your account. Your password will be stored securely.
     </p>
 
     {{#if error}}
@@ -11,12 +11,22 @@
 
     <form action="/register" method="POST" class="form-card">
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="username">Username (used for login)</label>
         <input id="username" name="username" type="text" required>
       </div>
 
       <div class="form-group">
-        <label for="password">Password (plain text)</label>
+        <label for="displayName">Display name (shown publicly)</label>
+        <input id="displayName" name="displayName" type="text" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
         <input id="password" name="password" type="password" required>
       </div>
 

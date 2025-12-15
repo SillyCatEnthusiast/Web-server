@@ -1,0 +1,41 @@
+<section class="auth-layout">
+  <div class="auth-card">
+    <h1>Your profile</h1>
+
+    {{#if error}}
+      <div class="alert alert-error">{{error}}</div>
+    {{/if}}
+
+    <div class="form-card">
+      <p><strong>Username:</strong> {{user.username}}</p>
+
+      <form action="/profile/display-name" method="POST" class="form-group">
+        <label for="displayName">Display name</label>
+        <input id="displayName" name="displayName" type="text" value="{{user.display_name}}" required>
+        <button type="submit" class="btn btn-primary">Update display name</button>
+      </form>
+
+      <form action="/profile/email" method="POST" class="form-group">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" value="{{user.email}}" required>
+        <button type="submit" class="btn btn-primary">Update email</button>
+      </form>
+
+      <form action="/profile/bio" method="POST" class="form-group">
+        <label for="bio">Bio</label>
+        <textarea id="bio" name="bio" rows="4">{{user.bio}}</textarea>
+        <button type="submit" class="btn btn-primary">Update bio</button>
+      </form>
+
+      <form action="/profile/password" method="POST" class="form-group">
+        <label for="oldPassword">Old password</label>
+        <input id="oldPassword" name="oldPassword" type="password" required>
+
+        <label for="newPassword">New password</label>
+        <input id="newPassword" name="newPassword" type="password" required>
+
+        <button type="submit" class="btn btn-primary">Change password</button>
+      </form>
+    </div>
+  </div>
+</section>

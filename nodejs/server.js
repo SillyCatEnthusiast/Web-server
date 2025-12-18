@@ -3,12 +3,20 @@ const session = require("express-session");
 const path = require("path");
 const exphbs = require("express-handlebars");
 const db = require("./database");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 const argon2 = require("argon2");
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const MAX_FAILED = 5;
 const LOCK_MINUTES = 15;
+const { sendEmail } = require("./email");
+
+
+
 // const users = [];
 // const comments = [];
 function requireLogin(req, res, next) {
@@ -334,3 +342,72 @@ app.post("/comment", (req, res) => {
 
   res.redirect("/comments");
 });
+// app.get("/email-test", async (req, res) => {
+//   const ok = await sendEmail("wfelkay@gmail.com", "Test", "Hello from nodemailer");
+//   res.send(ok ? "sent" : "failed");
+// });
+// app.get("/forgot", (req, res) => {
+//   res.render("pages/forgot");
+// });
+// app.post("/forgot", async (req, res) => {
+//   const email = req.body.email;
+
+//   if (!email) {
+//     return res.render("pages/forgot", { error: "Email required" });
+//   }
+
+//   const resetLink = "https://example.com/reset/abc123";
+
+//   await sendEmail(
+//     email,
+//     "Password reset",
+//     `Click here to reset your password: ${resetLink}`
+//   );
+
+//   res.render("pages/forgot", {
+//     message: "If that email exists, a reset link has been sent."
+//   });
+// });
+
+// app.get("/reset/:token", (req, res) => {
+//   res.render("pages/reset", { token: req.params.token });
+// });
+// //renders the rest page
+// app.post("/reset/:token", async (req, res) => {
+//   const token = req.params.token;
+//   const password = req.body.password || "";
+
+//   if (!password) {
+//     return res.status(400).render("pages/reset", { token, error: "Password required" });
+//   }
+
+//   const token_hash = crypto.createHash("sha256").update(token).digest("hex");
+
+//   const row = db.prepare(`
+//     SELECT id, user_id, expires_at, used_at
+//     FROM password_resets
+//     WHERE token_hash = ?
+//       AND used_at IS NULL
+//       AND expires_at > datetime('now')
+//     ORDER BY id DESC
+//     LIMIT 1
+//   `).get(token_hash);
+
+//   if (!row) {
+//     return res.status(400).render("pages/reset", { token, error: "Invalid or expired reset link" });
+//   }
+
+//   const newHash = await argon2.hash(password);
+
+//   db.prepare("UPDATE users SET password_hash = ? WHERE id = ?")
+//     .run(newHash, row.user_id);
+
+//   db.prepare("UPDATE password_resets SET used_at = datetime('now') WHERE id = ?")
+//     .run(row.id);
+
+//   req.session.destroy(() => {
+//     res.clearCookie("connect.sid");
+//     res.redirect("/login");
+//   });
+// });
+// //actual sql logic for the reset page

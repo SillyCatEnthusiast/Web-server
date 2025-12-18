@@ -13,6 +13,8 @@ RUN groupadd -g 1001 nodejs && \
 
 RUN chown -R nodejs:nodejs /app
 
+RUN mkdir -p /app/data && chown -R nodejs:nodejs /app/data
+
 USER nodejs
 
 EXPOSE 3000

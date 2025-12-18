@@ -21,6 +21,9 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"  # for direct access / debugging
+    env_file:
+      - ./nodejs/.env
     environment:
       - PORT=3000
-    # no volumes -> use what's baked into the image
+    volumes:
+      - ./nodejs/data:/app/data

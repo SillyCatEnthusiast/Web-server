@@ -19,8 +19,18 @@
             <span class="comment-author">@{{author}}</span>
             <span class="comment-date">{{createdAt}}</span>
           </div>
-          <div class="comment-body">
-            {{{text}}}
+
+          <div class="comment-body"
+               style="white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;">
+            <span class="comment-text"
+                  data-full="{{text}}"
+                  data-short=""
+                  data-expanded="false"></span>
+
+            <a href="#"
+               class="comment-toggle"
+               style="display:none;"
+               onclick="return toggleComment(this);">Read more</a>
           </div>
         </li>
       {{/each}}
@@ -29,3 +39,84 @@
     <p class="muted">No comments yet. Be the first to post something questionable.</p>
   {{/if}}
 </section>
+
+{{#if pagination}}
+  <div style="margin-top: 12px;">
+    {{#if pagination.hasPrev}}
+      <a href="/comments?page={{pagination.prevPage}}">Prev</a>
+    {{/if}}
+
+    <span> Page {{pagination.page}} of {{pagination.totalPages}} </span>
+
+    {{#if pagination.hasNext}}
+      <a href="/comments?page={{pagination.nextPage}}">Next</a>
+    {{/if}}
+  </div>
+{{/if}}
+
+<script>
+  // how many characters to show before truncating
+  const TRUNCATE_AT = 140;
+
+  function escapeHtml(s) {
+    // keep this simple: text only, no HTML injection
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function initTruncation() {
+    const nodes = document.querySelectorAll(".comment-text");
+    nodes.forEach((node) => {
+      // data-full comes from Handlebars. It may contain quotes etc.
+      // We treat it as plain text and escape it before inserting.
+      const full = node.getAttribute("data-full") || "";
+      const fullText = full;
+
+      if (fullText.length <= TRUNCATE_AT) {
+        node.innerHTML = escapeHtml(fullText);
+        return;
+      }
+
+      const shortText = fullText.slice(0, TRUNCATE_AT) + "…";
+      node.setAttribute("data-short", shortText);
+
+      // default collapsed view
+      node.innerHTML = escapeHtml(shortText);
+
+      // show the toggle link next to it
+      const toggle = node.parentElement.querySelector(".comment-toggle");
+      if (toggle) toggle.style.display = "inline";
+    });
+  }
+
+  function toggleComment(linkEl) {
+    const body = linkEl.parentElement;
+    const textEl = body.querySelector(".comment-text");
+    if (!textEl) return false;
+
+    const expanded = textEl.getAttribute("data-expanded") === "true";
+    const full = textEl.getAttribute("data-full") || "";
+    const short = textEl.getAttribute("data-short") || "";
+
+    if (expanded) {
+      textEl.innerHTML = escapeHtml(short);
+      textEl.setAttribute("data-expanded", "false");
+      linkEl.textContent = "Read more";
+    } else {
+      textEl.innerHTML = escapeHtml(full);
+      textEl.setAttribute("data-expanded", "true");
+      linkEl.textContent = "Show less";
+    }
+
+    return false; // prevent navigation
+  }
+
+  // Make toggleComment globally accessible for inline onclick
+  window.toggleComment = toggleComment;
+
+  initTruncation();
+</script>

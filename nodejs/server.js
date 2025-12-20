@@ -299,22 +299,46 @@ app.post("/profile/password", requireLogin, async (req, res) => {
 });
 //changes old pass
 app.get("/comments", (req, res) => {
+  const PAGE_SIZE = 20;
+
+  // page defaults to 1
+  const pageRaw = Number(req.query.page);
+  const page = Number.isInteger(pageRaw) && pageRaw > 0 ? pageRaw : 1;
+
+  const totalRow = db.prepare("SELECT COUNT(*) AS count FROM comments").get();
+  const total = totalRow.count;
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+
+  const offset = (safePage - 1) * PAGE_SIZE;
+
   const rows = db.prepare(`
     SELECT u.display_name AS author, c.text, c.created_at
     FROM comments c
     JOIN users u ON u.id = c.user_id
     ORDER BY c.id DESC
-  `).all();
+    LIMIT ? OFFSET ?
+  `).all(PAGE_SIZE, offset);
 
   res.render("pages/comments", {
     comments: rows.map(c => ({
       author: c.author,
       text: c.text,
-      createdAt: new Date(c.created_at).toISOString()
-    }))
+      createdAt: new Date(c.created_at).toISOString(),
+    })),
+    pagination: {
+      page: safePage,
+      totalPages,
+      hasPrev: safePage > 1,
+      hasNext: safePage < totalPages,
+      prevPage: safePage - 1,
+      nextPage: safePage + 1,
+    },
   });
 });
-//load the comments
+
+//paginate the comments
 app.get("/comment/new", (req, res) => {
   if (!req.session.loggedIn) {
     return res.render("pages/login", { error: "You must log in to post comments" });
@@ -342,72 +366,3 @@ app.post("/comment", (req, res) => {
 
   res.redirect("/comments");
 });
-// app.get("/email-test", async (req, res) => {
-//   const ok = await sendEmail("wfelkay@gmail.com", "Test", "Hello from nodemailer");
-//   res.send(ok ? "sent" : "failed");
-// });
-// app.get("/forgot", (req, res) => {
-//   res.render("pages/forgot");
-// });
-// app.post("/forgot", async (req, res) => {
-//   const email = req.body.email;
-
-//   if (!email) {
-//     return res.render("pages/forgot", { error: "Email required" });
-//   }
-
-//   const resetLink = "https://example.com/reset/abc123";
-
-//   await sendEmail(
-//     email,
-//     "Password reset",
-//     `Click here to reset your password: ${resetLink}`
-//   );
-
-//   res.render("pages/forgot", {
-//     message: "If that email exists, a reset link has been sent."
-//   });
-// });
-
-// app.get("/reset/:token", (req, res) => {
-//   res.render("pages/reset", { token: req.params.token });
-// });
-// //renders the rest page
-// app.post("/reset/:token", async (req, res) => {
-//   const token = req.params.token;
-//   const password = req.body.password || "";
-
-//   if (!password) {
-//     return res.status(400).render("pages/reset", { token, error: "Password required" });
-//   }
-
-//   const token_hash = crypto.createHash("sha256").update(token).digest("hex");
-
-//   const row = db.prepare(`
-//     SELECT id, user_id, expires_at, used_at
-//     FROM password_resets
-//     WHERE token_hash = ?
-//       AND used_at IS NULL
-//       AND expires_at > datetime('now')
-//     ORDER BY id DESC
-//     LIMIT 1
-//   `).get(token_hash);
-
-//   if (!row) {
-//     return res.status(400).render("pages/reset", { token, error: "Invalid or expired reset link" });
-//   }
-
-//   const newHash = await argon2.hash(password);
-
-//   db.prepare("UPDATE users SET password_hash = ? WHERE id = ?")
-//     .run(newHash, row.user_id);
-
-//   db.prepare("UPDATE password_resets SET used_at = datetime('now') WHERE id = ?")
-//     .run(row.id);
-
-//   req.session.destroy(() => {
-//     res.clearCookie("connect.sid");
-//     res.redirect("/login");
-//   });
-// });
-// //actual sql logic for the reset page

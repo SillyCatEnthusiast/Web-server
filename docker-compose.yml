@@ -1,12 +1,8 @@
-version: "3.8"
-
 services:
   nginx-manager:
     image: jc21/nginx-proxy-manager:latest
     container_name: nginx-manager
     restart: unless-stopped
-    expose:
-      - "3000" 
     ports:
       - "80:80"      # HTTP
       - "443:443"    # HTTPS
@@ -14,16 +10,21 @@ services:
     volumes:
       - ./nginx/data:/data
       - ./nginx/letsencrypt:/etc/letsencrypt
+    networks:
+      - web
 
   nodejs:
     build: ./nodejs
-    container_name: wildwest-nodejs
+    container_name: nodejs
     restart: unless-stopped
-    ports:
-      - "3000:3000"  # for direct access / debugging
-    env_file:
-      - ./nodejs/.env
+    # env_file:
+    #   - ./nodejs/.env
     environment:
-      - PORT=3000
-    volumes:
-      - ./nodejs/data:/app/data
+      - PORT=3001
+    # volumes:
+    #   - ./nodejs/data:/app/data
+    networks:
+      - web
+networks:
+  web:
+    driver: bridge

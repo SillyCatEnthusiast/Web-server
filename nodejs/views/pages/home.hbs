@@ -1,41 +1,108 @@
-<section class="hero">
-  <div class="hero-main">
-    <h1>Welcome to the Wild West of forums.</h1>
-    <p class="hero-lead">
-      Post anything!!!
-      Passwords are plain text. Comments live in RAM. It is exactly as safe as it sounds.
+<main class="container">
+
+  <section class="hero">
+    <h1>{{site.name}}</h1>
+    <p class="tagline">{{site.tagline}}</p>
+  </section>
+  <section class="section" id="contact">
+    <h2>Contact</h2>
+
+    <p>
+      Email:
+      <a href="mailto:{{site.email}}">{{site.email}}</a>
     </p>
 
-    <div class="hero-actions">
-      <a href="/register" class="btn btn-primary hero-btn">Get started</a>
-      <a href="/comments" class="btn btn-ghost hero-btn">View feed</a>
-    </div>
-
-    <p class="hero-note">
-      No email. No verification. Just a username, a password, and regret.
+    <p>
+      <a href="{{site.github}}" target="_blank" rel="noreferrer">GitHub</a>
+      {{#if site.linkedin}} | <a href="{{site.linkedin}}" target="_blank" rel="noreferrer">LinkedIn</a>{{/if}}
     </p>
-  </div>
+  </section>
+  <section class="section" id="education">
+    <h2>Education</h2>
+    <ul class="project-list">
+      {{#each education}}
+        <li class="project">
+          <div class="project-title">{{title}}</div>
+          <div class="project-desc">{{desc}}</div>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
 
-  <div class="hero-card">
+  <section class="section" id="coursework">
+    <h2>Relevant Coursework</h2>
+    <ul class="project-list">
+      {{#each coursework}}
+        <li class="project">
+          <div class="project-title">{{title}}</div>
+          <div class="project-desc">{{desc}}</div>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
 
-    <p class="hero-subtext">
-      Memory resets whenever the server restarts.
-      Nothing is permanent. Not even your worst takes.
-    </p>
-  </div>
-</section>
-
-<section class="feature-grid">
-  <article class="feature">
-    <h3>Instant sign-up</h3>
-    <p>No email, no captchas. Type a username and password, you’re in.</p>
-  </article>
-
-  <article class="feature">
-    <h3>Ephemeral data</h3>
-    <p>Everything lives in memory only. Restart the server and it all vanishes.</p>
-  </article>
+  <section class="section" id="skills">
+    <h2>Technical Skills</h2>
+    <ul class="project-list">
+      {{#each skills}}
+        <li class="project skill-card">
+          <div class="skill-header">
+            <div class="project-title">{{title}}</div>
+            <span class="skill-level {{level}}">{{level}}</span>
+          </div>
+          <div class="project-desc">{{desc}}</div>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
 
 
-  </article>
-</section>
+  <section class="section" id="projects">
+    <h2>Projects</h2>
+    <ul class="project-list">
+      {{#each projects}}
+        <li class="project">
+          <div class="project-title">{{title}}</div>
+          <div class="project-desc">{{desc}}</div>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
+
+  <section class="section" id="certificates">
+    <h2>Certificates</h2>
+    <ul class="project-list">
+      {{#each certificates}}
+        <li class="project">
+          <div class="project-title">{{title}}</div>
+          <div class="project-desc">{{desc}}</div>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
+
+  <section class="section" id="leadership">
+    <h2>Leadership & Activities</h2>
+    <ul class="project-list">
+      {{#each leadership}}
+        <li class="project">
+          <div class="project-title">{{title}}</div>
+          <div class="project-desc">{{desc}}</div>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
+
+  <section class="section" id="awards">
+    <h2>Awards & Competitions</h2>
+    <ul class="project-list">
+      {{#each awards}}
+        <li class="project">
+          <div class="project-title">{{title}}</div>
+          <div class="project-desc">{{desc}}</div>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
+
+</main>

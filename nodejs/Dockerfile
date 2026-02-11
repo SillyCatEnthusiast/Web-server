@@ -17,6 +17,6 @@ RUN mkdir -p /app/data && chown -R nodejs:nodejs /app/data
 
 USER nodejs
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["npm", "start"]

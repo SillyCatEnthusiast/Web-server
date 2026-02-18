@@ -164,3 +164,109 @@ html {
 .hero + .section {
   margin-top: 0;
 }
+/* Simple cookie banner styling */
+/* Outer wrapper spans full screen */
+#cookie-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+
+  display: flex;
+  justify-content: center;
+  background: transparent;  
+  border: none;             
+  box-shadow: none;         
+  padding: 0;               
+  z-index: 9999;
+}
+
+/* Inner container mirrors .footer-inner */
+#cookie-banner-inner {
+  max-width: 900px;      /* EXACT match */
+  width: 100%;
+  padding: 12px 20px;    /* match footer horizontal padding */
+  margin: 0 auto;
+
+  border-radius: 12px;
+  background: rgba(20,20,22,0.95);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+/* Text slightly lifted */
+#cookie-banner-inner .cookie-banner__text {
+  margin: 0;
+  transform: translateY(-2px);
+  color: rgba(255,255,255,0.8);
+}
+
+/* Buttons */
+#cookie-banner-inner button {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+#cookie-banner-inner button:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* Make Accept slightly stronger */
+#cookie-banner-inner #accept-analytics {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+
+/* Mobile: stack nicely */
+@media (max-width: 520px) {
+  #cookie-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #cookie-banner .cookie-banner__actions {
+    width: 100%;
+  }
+
+  #cookie-banner button {
+    width: 100%;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  #cookie-banner {
+    border-color: rgba(255,255,255,0.14);
+  }
+
+  #cookie-banner .cookie-banner__text {
+    color: #f2f2f2;
+  }
+
+  #cookie-banner button {
+    background: rgba(255,255,255,0.06);
+    color: #f2f2f2;
+    border-color: rgba(255,255,255,0.16);
+  }
+
+  #cookie-banner #accept-analytics {
+    background: #f2f2f2;
+    color: #111;
+    border-color: #f2f2f2;
+  }
+
+  #cookie-banner button:focus {
+    outline-color: rgba(255,255,255,0.5);
+  }
+}

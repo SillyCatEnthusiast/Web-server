@@ -11,5 +11,64 @@
   {{> navbar}}
   {{{body}}}
   {{> footer}}
+
+  {{!--
+    Client-side analytics script.
+    This file should be served by Express as a static file at /analytics.js.
+    It creates window.analytics with:
+      - analytics.accept()
+      - analytics.reject()
+      - analytics.status()
+      - analytics.track(...)
+  --}}
+  <script src="/analytics.js"></script>
+
+  {{!--
+    Cookie / analytics consent banner.
+    This is only shown when consent is "unset".
+    If the browser has DNT/GPC enabled, analytics.status() returns "denied" and the banner stays hidden.
+  --}}
+  <div id="cookie-banner" style="display:none;">
+    <div id="cookie-banner-inner">
+      <p class="cookie-banner__text">
+        Analytics is off (your browser privacy setting or a previous choice).
+      </p>
+      <div class="cookie-banner__actions">
+        <button id="accept-analytics" type="button">Accept</button>
+        <button id="reject-analytics" type="button">Reject</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    (function () {
+      var banner = document.getElementById('cookie-banner');
+      if (!window.analytics) return;
+
+      var status = window.analytics.status();
+
+      // Show banner for unset OR denied (so user sees what's happening)
+      if (status !== 'granted') banner.style.display = 'block';
+
+      if (status === 'denied') {
+        banner.querySelector('.cookie-banner__text').textContent =
+          'Analytics is off (your browser privacy setting or a previous choice).';
+        // You can also hide the Accept button here if you want
+        // document.getElementById('accept-analytics').style.display = 'none';
+      }
+
+      document.getElementById('accept-analytics').onclick = function () {
+        window.analytics.accept();
+        banner.style.display = 'none';
+      };
+
+      document.getElementById('reject-analytics').onclick = function () {
+        window.analytics.reject();
+        banner.style.display = 'none';
+      };
+    })();
+  </script>
+
 </body>
 </html>

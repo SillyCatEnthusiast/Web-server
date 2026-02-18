@@ -1,3 +1,4 @@
+require('./telemetry');
 const express = require("express");
 const path = require("path");
 const exphbs = require("express-handlebars");
@@ -6,6 +7,19 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.set("trust proxy", 1);
+
+app.use((req, res, next) => {
+  console.log(JSON.stringify({
+    ts: new Date().toISOString(),
+    ip: req.ip,
+    method: req.method,
+    path: req.originalUrl,
+    ua: req.headers["user-agent"]
+  }));
+  next();
+});
+app.use(express.json());
+app.use(require('./routes/clientTelemetry'));
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
@@ -63,7 +77,7 @@ app.get("/", (req, res) => {
 
     projects: [
       { title: "Home lab", desc: "Fully dockerized linux home lab currently running a DNS filter through Adguard with a vpn through Wireguard. Plans to add Falco and Grafana monitoring." },
-      { title: "This website", desc: "Dockerized Javascript web server using Node.js, Express, Handlebars, and Nginx for HTTPS." },
+      { title: "This website", desc: "Dockerized Javascript web server using Node.js, Express, Handlebars, and Nginx for HTTPS. Backend of OpenTelemetry, Prometheus, Jaeger, Loki, and Grafana for telemetry" },
     ],
 
     certificates: [

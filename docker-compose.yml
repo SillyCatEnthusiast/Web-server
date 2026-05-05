@@ -34,11 +34,15 @@ services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:latest
     container_name: otel-collector
+    restart: unless-stopped
+
     command: ["--config=/etc/otelcol/config.yaml"]
     volumes:
       - ./otel/otelcol-config.yaml:/etc/otelcol/config.yaml:ro
     networks: [web]
   jaeger:
+    restart: unless-stopped
+
     image: jaegertracing/all-in-one:latest
     environment:
       - COLLECTOR_OTLP_ENABLED=true
@@ -48,6 +52,8 @@ services:
       - "4318:4318"     # OTLP HTTP ingest
     networks: [web]
   prometheus:
+    restart: unless-stopped
+
     image: prom/prometheus:latest
     volumes:
       - ./grafana/prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -56,6 +62,8 @@ services:
       - "9090:9090"
 
   grafana:
+    restart: unless-stopped
+
     image: grafana/grafana:latest
     networks: [web]
     ports:
@@ -66,6 +74,8 @@ services:
     depends_on:
       - prometheus
   loki:
+    restart: unless-stopped
+
     image: grafana/loki:latest
     command: -config.file=/etc/loki/local-config.yaml
     ports:
@@ -73,6 +83,8 @@ services:
     networks: [web]
 
   promtail:
+    restart: unless-stopped
+
     image: grafana/promtail:latest
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro

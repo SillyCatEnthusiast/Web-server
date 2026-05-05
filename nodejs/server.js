@@ -9,15 +9,40 @@ const PORT = process.env.PORT || 3001;
 app.set("trust proxy", 1);
 
 app.use((req, res, next) => {
-  console.log(JSON.stringify({
-    ts: new Date().toISOString(),
-    ip: req.ip,
-    method: req.method,
-    path: req.originalUrl,
-    ua: req.headers["user-agent"]
-  }));
+  const start = process.hrtime.bigint();
+
+  res.on("finish", () => {
+    const end = process.hrtime.bigint();
+    const ms = Number(end - start) / 1e6;
+
+    const log = {
+      time: new Date().toISOString(),
+      // IP handling: prefer XFF (first IP) then fallback
+      remote_addr: (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || req.socket.remoteAddress,
+      xff: req.headers["x-forwarded-for"] || "",
+      method: req.method,
+      path: req.originalUrl?.split("?")[0] || req.url,
+      status: res.statusCode,
+      referer: req.headers["referer"] || "",
+      ua: req.headers["user-agent"] || "",
+      accept: req.headers["accept"] || "",
+      accept_lang: req.headers["accept-language"] || "",
+      accept_enc: req.headers["accept-encoding"] || "",
+      sec_ch_ua: req.headers["sec-ch-ua"] || "",
+      sec_fetch_site: req.headers["sec-fetch-site"] || "",
+      sec_fetch_mode: req.headers["sec-fetch-mode"] || "",
+      sec_fetch_dest: req.headers["sec-fetch-dest"] || "",
+      cookie: req.headers["cookie"] || "",
+      req_time_ms: Math.round(ms * 1000) / 1000
+    };
+
+    // stdout as a single JSON line
+    process.stdout.write(JSON.stringify(log) + "\n");
+  });
+
   next();
 });
+
 app.use(express.json());
 app.use(require('./routes/clientTelemetry'));
 
@@ -66,7 +91,7 @@ app.get("/", (req, res) => {
     ],
 
     skills: [
-      { title: "JavaScript", desc: "Node.js, Express", level: "Proficient" },
+      { title: "JavaScript/TypeScript", desc: "Node.js, Express, React", level: "Advanced" },
       { title: "Java", desc: "Object oriented programming", level: "Beginner" },
       { title: "Python", desc: "Automation, scripting", level: "Proficient" },
       { title: "C", desc: "Memory management, Pointer security, Compilation Debugging", level: "Advanced" },
@@ -76,7 +101,7 @@ app.get("/", (req, res) => {
     ],
 
     projects: [
-      { title: "Home lab", desc: "Fully dockerized linux home lab currently running a DNS filter through Adguard with a vpn through Wireguard. Plans to add Falco and Grafana monitoring." },
+      { title: "Home lab", desc: "Fully dockerized linux home lab currently running a DNS filter through Adguard with a vpn through Wireguard." },
       { title: "This website", desc: "Dockerized Javascript web server using Node.js, Express, Handlebars, and Nginx for HTTPS. Backend of OpenTelemetry, Prometheus, Jaeger, Loki, and Grafana for telemetry" },
     ],
 
@@ -86,7 +111,7 @@ app.get("/", (req, res) => {
 
     leadership: [
       { title: "VP / University of Maine Cyber Security Team", desc: "Organized multiple Cyber Security related learning labs and Specialist panels as well as initiating inter-club collaboration." },
-      { title: "Member / Computing Club", desc: "" },
+      { title: "Officer / Computing Club", desc: "" },
       { title: "Participant / Bangor Beer Sec (Sep 25th 2025, Jan 14th 2026)", desc: "Participated in multiple Bangor area Cyber Security meetups" },
       
     ],
@@ -96,6 +121,8 @@ app.get("/", (req, res) => {
       { title: "Hivestorm 2024", desc: "Competed in hivestorm 2024 as part of UMCST" },
       { title: "NCL 2025", desc: "Placed top 10% in the individual game and team game" },
       { title: "NECCDL 2026", desc: "Competed in NECCDL 2026 as part of UMCST" },
+      { title: "NCL 2026", desc: "Placed top 10% in the individual game and team game again" },
+
     ],
   });
 });
